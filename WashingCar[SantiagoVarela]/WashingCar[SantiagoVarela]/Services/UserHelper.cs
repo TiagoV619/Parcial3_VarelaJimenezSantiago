@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WashingCar_SantiagoVarela_.DAL;
 using WashingCar_SantiagoVarela_.DAL.Entities;
 using WashingCar_SantiagoVarela_.Helpers;
+using WashingCar_SantiagoVarela_.Models;
 
 namespace WashingCar_SantiagoVarela_.Services
 {
@@ -11,7 +12,8 @@ namespace WashingCar_SantiagoVarela_.Services
         private readonly DatabaseContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        
+        private readonly SignInManager<User> _signInManager;
+
         public UserHelper(DatabaseContext context, 
             UserManager<User> userManager, 
             RoleManager<IdentityRole> roleManager, 
@@ -20,6 +22,7 @@ namespace WashingCar_SantiagoVarela_.Services
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         
         }
 
@@ -52,10 +55,14 @@ namespace WashingCar_SantiagoVarela_.Services
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
-
-       public Task LogoutAsync()
+        public async Task<SignInResult> LoginAsync(LoginViewModel loginViewModel)
         {
-            throw new NotImplementedException();
+            return await _signInManager.PasswordSignInAsync(loginViewModel.Username,loginViewModel.Password,loginViewModel.RememberMe, false);
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         } 
     }
 }

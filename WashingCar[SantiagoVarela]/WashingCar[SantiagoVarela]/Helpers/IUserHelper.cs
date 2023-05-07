@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using WashingCar_SantiagoVarela_.DAL.Entities;
+using WashingCar_SantiagoVarela_.Models;
 
 namespace WashingCar_SantiagoVarela_.Helpers
 {
@@ -17,7 +18,7 @@ namespace WashingCar_SantiagoVarela_.Helpers
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
-       // Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
+        Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
 
         Task LogoutAsync();
     }

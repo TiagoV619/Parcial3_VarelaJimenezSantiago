@@ -8,20 +8,20 @@ namespace WashingCar_SantiagoVarela_.DAL
     {
         private readonly DatabaseContext _context;
         private readonly IUserHelper _userHelper;
-
-
         public SeederDb(DatabaseContext context, IUserHelper userHelper)
         {
             _context = context;
             _userHelper = userHelper;
         }
+
         public async Task SeederAsync()
         {
-            var email = "Tiagovarela@yopmail.com";
+
             await _context.Database.EnsureCreatedAsync();
             await PopulateServicesAsync();
             await PopulateRolesAsync();
-            await PopulateUserAsync(email);
+            await PopulateUserAsync("1044210047", "Admin", "Role", "admin_role@yopmail.com", UserType.Admin);
+            await PopulateUserAsync("1034566432", "Client", "Role", "client_role@yopmail.com", UserType.Client);
 
             await _context.SaveChangesAsync();
         }
@@ -36,7 +36,7 @@ namespace WashingCar_SantiagoVarela_.DAL
                 _context.Services.Add(new Service { Name = "Lavada + Aspirada de Cojineria", Price = 30000 });
                 _context.Services.Add(new Service { Name = "Lavada Full", Price = 65000 });
                 _context.Services.Add(new Service { Name = "Lavada en seco del Motor", Price = 80000 });
-                _context.Services.Add(new Service { Name = "Lavada Chasis", Price = 90000 });
+                _context.Services.Add(new Service { Name = "Lavada del Chasis", Price = 90000 });
             }
         }
 
@@ -45,8 +45,7 @@ namespace WashingCar_SantiagoVarela_.DAL
             await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
             await _userHelper.CheckRoleAsync(UserType.Client.ToString());
         }
-
-        private async Task PopulateUserAsync(string email)
+        private async Task PopulateUserAsync(string document, string firstName, string lastName, string email, UserType userType)
         {
             User user = await _userHelper.GetUserAsync(email);
 
@@ -54,20 +53,18 @@ namespace WashingCar_SantiagoVarela_.DAL
             {
                 user = new User
                 {
-                    Document = "1001250422",
-                    FirstName = "Santiago",
-                    LastName = "Varela",
+                    Document = document,
+                    FirstName = firstName,
+                    LastName = lastName,
                     Email = email,
                     UserName = email,
-                    UserType = UserType.Admin,
+                    UserType = userType,
                 };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
             }
-            await _userHelper.AddUserAsync(user, "123456");
-            await _userHelper.AddUserToRoleAsync(user, UserType.Admin.ToString());
         }
-
-
-
 
 
     }
