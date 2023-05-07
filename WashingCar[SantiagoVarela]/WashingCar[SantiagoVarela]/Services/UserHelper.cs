@@ -52,6 +52,7 @@ namespace WashingCar_SantiagoVarela_.Services
             return await _userManager.IsInRoleAsync(user, roleName);
         }
 
+
        public Task LogoutAsync()
         {
             throw new NotImplementedException();

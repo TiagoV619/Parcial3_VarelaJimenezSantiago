@@ -9,7 +9,7 @@ namespace WashingCar_SantiagoVarela_.Helpers
 
         Task<IdentityResult> AddUserAsync(User user, string password);
 
-        // Task<User> AddUserAsync(AddUserViewModel addUserViewModel);
+       // Task<User> AddUserAsync(AddUserViewModel addUserViewModel);
 
         Task CheckRoleAsync(string roleName);
 
@@ -17,8 +17,8 @@ namespace WashingCar_SantiagoVarela_.Helpers
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
 
-        // Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
+       // Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
 
         Task LogoutAsync();
     }
-}
+    }

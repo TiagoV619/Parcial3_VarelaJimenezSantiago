@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WashingCar_SantiagoVarela_.DAL;
+using WashingCar_SantiagoVarela_.DAL.Entities;
+using WashingCar_SantiagoVarela_.Helpers;
+using WashingCar_SantiagoVarela_.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +15,21 @@ builder.Services.AddDbContext<DatabaseContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentity<User, IdentityRole>(io =>
+{
+io.User.RequireUniqueEmail = true; 
+io.Password.RequireDigit = false;
+io.Password.RequiredUniqueChars = 0;
+io.Password.RequireLowercase = false;
+io.Password.RequireNonAlphanumeric = false;
+io.Password.RequireUppercase = false;
+io.Password.RequiredLength = 6;
+
+}).AddEntityFrameworkStores<DatabaseContext>();
+
 builder.Services.AddTransient<SeederDb>();
+builder.Services.AddScoped<IUserHelper, UserHelper>();
+
 
 var app = builder.Build();
 
@@ -43,7 +61,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseAuthentication();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
