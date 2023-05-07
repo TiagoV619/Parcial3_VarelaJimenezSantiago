@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WashingCar_SantiagoVarela_.DAL;
 using WashingCar_SantiagoVarela_.Helpers;
 using WashingCar_SantiagoVarela_.Models;
 
@@ -7,9 +8,12 @@ namespace WashingCar_SantiagoVarela_.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
-        public AccountController(IUserHelper userHelper)
+        private readonly DatabaseContext _context;
+
+        public AccountController(IUserHelper userHelper, DatabaseContext context)
         {
             _userHelper = userHelper;
+            _context = context;
         }
 
         [HttpGet]
@@ -45,5 +49,9 @@ namespace WashingCar_SantiagoVarela_.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Unauthorized()
+        {
+            return View();
+        }
     }
 }
